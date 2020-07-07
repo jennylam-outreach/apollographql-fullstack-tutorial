@@ -95,6 +95,6 @@ const Launches: React.FC<LaunchesProps> = () => {
         }
       </Fragment>
   );
-};
+}
 
 export default Launches;
