@@ -37,8 +37,23 @@ type TripUpdateResponse {
   launches: [Launch]
 }
 
-type Query {
+type LaunchConnection {
+  cursor: String!
+  hasMore: Boolean!
   launches: [Launch]!
+}
+
+type Query {
+  launches(
+    """
+    The number of results to show. Must be >=1. Default = 20
+    """
+    pageSize: Int
+    """
+    If you add a cursor here, it will only return results _after_ this cursor
+    """
+    after: String
+  ): LaunchConnection!
   launch(id: ID!): Launch
   me: User
 }
