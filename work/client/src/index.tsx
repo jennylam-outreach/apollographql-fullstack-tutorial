@@ -10,11 +10,21 @@ import injectStyles from './styles';
 const cache = new InMemoryCache();
 const link = new HttpLink({
     uri: 'http://localhost:4000/',
+    headers: {
+        authorization: localStorage.getItem('agql-token'),
+    },
 });
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
     cache,
     link,
+});
+
+cache.writeData( {
+    data: {
+        isLoggedIn: !!localStorage.getItem("agpl-token"),
+        cartItems: [],
+    },
 });
 
 injectStyles();
