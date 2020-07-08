@@ -14,6 +14,24 @@ export const LOGIN_USER = gql`
 `;
 
 export default function Login() {
-  const [login, { data }] = useMutation<LoginTypes.login, LoginTypes.loginVariables>(LOGIN_USER);
+  const client: ApolloClient<any> = useApolloClient();
+  const [login, { loading, error }] = useMutation<LoginTypes.login, LoginTypes.loginVariables>(
+      LOGIN_USER, {
+        onCompleted( {login} ) {
+          // Safe the login token to localStorage
+          localStorage.setItem('agql-token', login as string);   // apollogrqphql-tutorial
+          // An example of direct write - Write local data to Apollo cache indicating that the user is logged in
+          client.writeData( {
+            data : {
+              isLoggedIn: true
+            }
+          });
+        }
+      }
+  );
+
+  if (loading) return <Loading />;
+  if (error) return <p>An error occurred</p>;
+
   return <LoginForm login={login} />;
 }
